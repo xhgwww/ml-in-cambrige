@@ -235,7 +235,7 @@ def evaluate_basis_functions(l, X, Z):
 
 # 我们扩展数据
 
-l = 1.0 # XXX 高斯基函数的宽度。学生需要完成
+l = 0.1 # XXX 高斯基函数的宽度。学生需要完成
 
 X_tilde_train = get_x_tilde(evaluate_basis_functions(l, X_train, X_train))
 X_tilde_test = get_x_tilde(evaluate_basis_functions(l, X_test, X_train))
