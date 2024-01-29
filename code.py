@@ -5,16 +5,16 @@
 
 import numpy as np
 
-X = np.loadtxt('X.txt')
-y = np.loadtxt('y.txt')
+X = np.loadtxt('D:\\HuaweiMoveData\\Users\\hlc\\Desktop\\Preparing for Cambridge\\cam\\data_set_group_6\X.txt')
+y = np.loadtxt('D:\\HuaweiMoveData\\Users\\hlc\\Desktop\\Preparing for Cambridge\\cam\\data_set_group_6\y.txt')
 
 # We randomly permute the data
 
-permutation = np.random.permutation(X.shape[ 0 ])
+permutation = np.random.permutation(X.shape[ 0 ])  # 这样做的目的是打乱数据集的顺序，以提高模型的训练效果。
 X = X[ permutation, : ]
 y = y[ permutation ]
 
-# We plot the data
+# We plot the data 可视
 
 import matplotlib.pyplot as plt
 
@@ -27,9 +27,9 @@ import matplotlib.pyplot as plt
 # y: 1d array with the class labels (0 or 1)
 #
 # Output: 2D matrices with the x and y coordinates of the points shown in the plot
-#
 
-def plot_data_internal(X, y):
+
+def plot_data_internal(X, y): # 绘制散点图
     x_min, x_max = X[ :, 0 ].min() - .5, X[ :, 0 ].max() + .5
     y_min, y_max = X[ :, 1 ].min() - .5, X[ :, 1 ].max() + .5
     xx, yy = np.meshgrid(np.linspace(x_min, x_max, 100), np.linspace(y_min, y_max, 100))
@@ -143,7 +143,11 @@ def fit_w(X_tilde_train, y_train, X_tilde_test, y_test, n_steps, alpha):
     for i in range(n_steps):
         sigmoid_value = predict(X_tilde_train, w)
 
-        w = # XXX Gradient-based update rule for w. To be completed by the student
+        # w = w - alpha * np.dot(X_tilde_train.T, sigmoid_value - y_train) / len(y_train) #用梯度下降训练
+        # XXX Gradient-based update rule for w. To be completed by the student
+
+        gradient = np.dot((y_train-sigmoid_value).T, X_tilde_train)
+        w = w + alpha * gradient
 
         ll_train[ i ] = compute_average_ll(X_tilde_train, y_train, w)
         ll_test[ i ] = compute_average_ll(X_tilde_test, y_test, w)
@@ -153,8 +157,8 @@ def fit_w(X_tilde_train, y_train, X_tilde_test, y_test, n_steps, alpha):
 
 # We train the classifier
 
-alpha = # XXX Learning rate for gradient-based optimisation. To be completed by the student
-n_steps = # XXX Number of steps of gradient-based optimisation. To be completed by the student
+alpha = 0.01#先试试0.01 XXX Learning rate for gradient-based optimisation. To be completed by the student
+n_steps = 100#epoch训练次数 XXX Number of steps of gradient-based optimisation. To be completed by the student
 
 X_tilde_train = get_x_tilde(X_train)
 X_tilde_test = get_x_tilde(X_test)
@@ -236,15 +240,15 @@ def evaluate_basis_functions(l, X, Z):
 
 # We expand the data
 
-l = # XXX Width of the Gaussian basis funcction. To be completed by the student
+l = 1.0 # XXX Width of the Gaussian basis funcction. To be completed by the student
 
 X_tilde_train = get_x_tilde(evaluate_basis_functions(l, X_train, X_train))
 X_tilde_test = get_x_tilde(evaluate_basis_functions(l, X_test, X_train))
 
 # We train the new classifier on the feature expanded inputs
 
-alpha = # XXX Learning rate for gradient-based optimisation with basis functions. To be completed by the student
-n_steps = # XXX Number of steps of gradient-based optimisation with basis functions. To be completed by the student
+alpha = 0.0005# XXX Learning rate for gradient-based optimisation with basis functions. To be completed by the student
+n_steps = 100# XXX Number of steps of gradient-based optimisation with basis functions. To be completed by the student
 
 w, ll_train, ll_test = fit_w(X_tilde_train, y_train, X_tilde_test, y_test, n_steps, alpha)
 
